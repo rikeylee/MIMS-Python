@@ -28,8 +28,8 @@ jumping = False
 y_velocity = 0
 
 # Load Atom's character image (with wig)
-atom_image = pygame.Surface((ATOM_WIDTH, ATOM_HEIGHT))  # Placeholder for image
-atom_image.fill(RED)
+atom_image = pygame.image.load("atom.png").convert_alpha()
+atom_image = pygame.transform.scale(atom_image, (ATOM_WIDTH, ATOM_HEIGHT))
 
 # Create a simple wig (just a small rectangle on top of Atom)
 wig_width = 40
