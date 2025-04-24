@@ -8,6 +8,7 @@ pygame.init()
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Atom's Adventure")
+facing_right = True  # Track direction
 
 # Colors
 WHITE = (255, 255, 255)
@@ -19,8 +20,8 @@ FPS = 60
 clock = pygame.time.Clock()
 
 # Character setup
-ATOM_WIDTH = 50
-ATOM_HEIGHT = 60
+ATOM_WIDTH = 100
+ATOM_HEIGHT = 120
 atom_x = 100
 atom_y = HEIGHT - ATOM_HEIGHT
 atom_velocity = 5
@@ -28,14 +29,10 @@ jumping = False
 y_velocity = 0
 
 # Load Atom's character image (with wig)
-atom_image = pygame.image.load("atom.png").convert_alpha()
+atom_image = pygame.image.load("images/atom.png").convert_alpha()
 atom_image = pygame.transform.scale(atom_image, (ATOM_WIDTH, ATOM_HEIGHT))
 
-# Create a simple wig (just a small rectangle on top of Atom)
-wig_width = 40
-wig_height = 10
-wig = pygame.Surface((wig_width, wig_height))
-wig.fill((255, 255, 0))  # Yellow wig
+# 
 
 # Gravity & Jumping
 gravity = 0.8
@@ -59,8 +56,10 @@ while running:
     
     if keys[pygame.K_LEFT]:
         atom_x -= atom_velocity
+        facing_right = False
     if keys[pygame.K_RIGHT]:
         atom_x += atom_velocity
+        facing_right = True
 
     # Jumping mechanic
     if not jumping:
@@ -78,9 +77,14 @@ while running:
             y_velocity = 0
 
     # Draw Atom and wig
-    screen.blit(atom_image, (atom_x, atom_y))
-    screen.blit(wig, (atom_x + 5, atom_y - wig_height))  # Wig slightly above Atom’s head
-
+    # screen.blit(atom_image, (atom_x, atom_y))
+    wig_lift = -5 if jumping and y_velocity > 0 else 0
+    flipped_image = pygame.transform.flip(atom_image, True, False) if facing_right else atom_image
+    # 
+    # screen.blit(flipped_image, (atom_x, atom_y))
+    
+    # flipped_image = pygame.transform.flip(atom_image, not facing_right, False)
+    screen.blit(flipped_image, (atom_x, atom_y + wig_lift))
     # Update the display
     pygame.display.update()
 
