@@ -78,13 +78,9 @@ while running:
 
     # Draw Atom and wig
     # screen.blit(atom_image, (atom_x, atom_y))
-    wig_lift = -5 if jumping and y_velocity > 0 else 0
     flipped_image = pygame.transform.flip(atom_image, True, False) if facing_right else atom_image
-    # 
-    # screen.blit(flipped_image, (atom_x, atom_y))
+    screen.blit(flipped_image, (atom_x, atom_y))
     
-    # flipped_image = pygame.transform.flip(atom_image, not facing_right, False)
-    screen.blit(flipped_image, (atom_x, atom_y + wig_lift))
     # Update the display
     pygame.display.update()
 
