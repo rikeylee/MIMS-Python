@@ -5,8 +5,11 @@ import random
 pygame.init()
 
 # Game Window Setup
-WIDTH, HEIGHT = 800, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+# WIDTH, HEIGHT = 1080, 800
+# screen = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+WIDTH, HEIGHT = screen.get_size()  # Get the actual screen resolution
+
 pygame.display.set_caption("Atom's Adventure")
 facing_right = True  # Track direction
 
@@ -20,8 +23,9 @@ FPS = 60
 clock = pygame.time.Clock()
 
 # Character setup
-ATOM_WIDTH = 100
-ATOM_HEIGHT = 120
+ATOM_HEIGHT = HEIGHT // 5  # 1/10 of the screen height
+ATOM_WIDTH = ATOM_HEIGHT * 0.75  # 3/4 of the height
+
 atom_x = 100
 atom_y = HEIGHT - ATOM_HEIGHT
 atom_velocity = 5
@@ -32,11 +36,13 @@ y_velocity = 0
 atom_image = pygame.image.load("images/atom.png").convert_alpha()
 atom_image = pygame.transform.scale(atom_image, (ATOM_WIDTH, ATOM_HEIGHT))
 
-# 
+#Background Image
+background = pygame.image.load("images/background.png").convert_alpha()
+background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 
 # Gravity & Jumping
 gravity = 0.8
-jump_strength = -15
+jump_strength = -20
 
 # Power-ups
 power_ups = []
@@ -45,7 +51,13 @@ power_ups = []
 running = True
 while running:
     screen.fill(WHITE)
-    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
+
     # Handle events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -76,10 +88,14 @@ while running:
             jumping = False
             y_velocity = 0
 
-    # Draw Atom and wig
+    # Draw Background
+    screen.blit(background, (0, 0))
+
+    # Draw Atom
     flipped_image = pygame.transform.flip(atom_image, True, False) if facing_right else atom_image
     screen.blit(flipped_image, (atom_x, atom_y))
     
+
     # Update the display
     pygame.display.update()
 
